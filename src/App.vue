@@ -1,24 +1,41 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <HelloWorld :key="keyvalue" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import HelloWorld from "./components/HelloWorld";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     HelloWorld
+  },
+  data() {
+    return {
+      keyvalue: 0
+    };
+  },
+  methods: {
+    updateKey() {
+      this.keyvalue += 1;
+    }
+  },
+  created: function () {
+      const cron = require("node-cron");
+      global.component = this;
+      cron.schedule("* * * * * *", function() {
+        component.updateKey();
+        console.log(component.keyvalue);
+      });
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
