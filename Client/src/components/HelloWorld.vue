@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ this.$vnode.key }}</h1>
+    <h1>{{ apiResponse }}</h1>
   </div>
 </template>
 
@@ -9,8 +10,14 @@ export default {
   name: "HelloWorld",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      apiResponse: ""
     };
+  },
+  mounted() {
+    const axios = require("axios");
+    axios
+      .get("http://localhost:3000/url")
+      .then(response => (this.apiResponse = response.data));
   }
 };
 </script>
