@@ -22,13 +22,12 @@ export default {
       this.keyvalue += 1;
     }
   },
-  created: function () {
-      const cron = require("node-cron");
-      global.component = this;
-      cron.schedule("* * * * * *", function() {
-        component.updateKey();
-        console.log(component.keyvalue);
-      });
+  created: function() {
+    const cron = require("node-cron");
+    global.component = this;
+    cron.schedule("* * * * * *", function() {
+      component.updateKey();
+    });
   }
 };
 </script>
