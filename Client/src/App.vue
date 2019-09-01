@@ -23,11 +23,11 @@ export default {
     }
   },
   created: function() {
-    const cron = require("node-cron");
+    /*const cron = require("node-cron");
     global.component = this;
     cron.schedule("* * * * * *", function() {
       component.updateKey();
-    });
+    });*/
   }
 };
 </script>
