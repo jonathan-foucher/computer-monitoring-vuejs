@@ -8,10 +8,30 @@ server.use(cors());
 
 // server listening on the port 3000
 server.listen(3000, () => {
-    console.log("Server running on port 3000");
+  console.log("Server running on port 3000");
 });
 
 // get
 server.get("/url", (req, res, next) => {
-    res.json("First api test");
+  dataGPU = updateGpuData(function (err, dataGPU) {
+    res.json(dataGPU);
+  });
 });
+
+function updateGpuData(callback) {
+  const { exec } = require("child_process");
+  exec(
+    "nvidia-smi --query-gpu=gpu_name,temperature.gpu,memory.used,memory.total,utilization.gpu,utilization.memory,timestamp --format=csv",
+    (err, stdout, stderr) => {
+      if (err) {
+        console.log(stderr);
+      }
+      return callback(null, stdout);
+    }
+  );
+}
+
+// some other commands for later
+// wmic cpu get caption, deviceid, name, numberofcores, maxclockspeed, status
+// wmic OS get TotalVisibleMemorySize,FreePhysicalMemory
+// wmic diskdrive get name,size,model,description

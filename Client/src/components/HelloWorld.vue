@@ -1,8 +1,8 @@
 <template>
   <div class="hello">
+    <h1>{{ apiResponse }}</h1>
     <svg id="svg-graphique" viewBox="0 0 900 600" />
     <h1>{{ this.$vnode.key }}</h1>
-    <h1>{{ apiResponse }}</h1>
   </div>
 </template>
 
@@ -185,9 +185,9 @@ export default {
   },
   mounted() {
     const axios = require("axios");
-    /*axios
+    axios
       .get("http://localhost:3000/url")
-      .then(response => (this.apiResponse = response.data));*/
+      .then(response => (this.apiResponse = response.data));
 
     this.initGraph();
   }
