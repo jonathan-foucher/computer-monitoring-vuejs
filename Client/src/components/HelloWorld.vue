@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
-    <h1>{{ apiResponse }}</h1>
     <svg id="svg-graphique" viewBox="0 0 900 600" />
-    <h1>{{ this.$vnode.key }}</h1>
   </div>
 </template>
 
@@ -22,7 +20,6 @@ export default {
   data() {
     return {
       localFr: localFrJSON,
-      apiResponse: "",
       margin: {
         top: 20,
         right: 20,
@@ -40,74 +37,20 @@ export default {
       yDomain: 0,
       xScale: 0,
       yScale: 0,
-      area: 0,
-      dataGraph: [
-        { time: new Date("2019-09-01 13:32:54"), value: 54 },
-        { time: new Date("2019-09-01 13:32:55"), value: 55 },
-        { time: new Date("2019-09-01 13:32:56"), value: 58 },
-        { time: new Date("2019-09-01 13:32:57"), value: 59 },
-        { time: new Date("2019-09-01 13:32:58"), value: 61 },
-        { time: new Date("2019-09-01 13:32:59"), value: 60 },
-        { time: new Date("2019-09-01 13:33:00"), value: 59 },
-        { time: new Date("2019-09-01 13:33:01"), value: 62 },
-        { time: new Date("2019-09-01 13:33:02"), value: 65 },
-        { time: new Date("2019-09-01 13:33:03"), value: 67 },
-        { time: new Date("2019-09-01 13:33:04"), value: 62 },
-        { time: new Date("2019-09-01 13:33:05"), value: 68 },
-        { time: new Date("2019-09-01 13:33:06"), value: 70 },
-        { time: new Date("2019-09-01 13:33:07"), value: 73 },
-        { time: new Date("2019-09-01 13:33:08"), value: 75 },
-        { time: new Date("2019-09-01 13:33:09"), value: 76 },
-        { time: new Date("2019-09-01 13:33:10"), value: 76 },
-        { time: new Date("2019-09-01 13:33:11"), value: 76 },
-        { time: new Date("2019-09-01 13:33:12"), value: 77 },
-        { time: new Date("2019-09-01 13:33:13"), value: 79 },
-        { time: new Date("2019-09-01 13:33:14"), value: 76 },
-        { time: new Date("2019-09-01 13:33:15"), value: 72 },
-        { time: new Date("2019-09-01 13:33:16"), value: 68 },
-        { time: new Date("2019-09-01 13:33:17"), value: 67 },
-        { time: new Date("2019-09-01 13:33:18"), value: 65 },
-        { time: new Date("2019-09-01 13:33:19"), value: 66 },
-        { time: new Date("2019-09-01 13:33:20"), value: 64 },
-        { time: new Date("2019-09-01 13:33:21"), value: 62 },
-        { time: new Date("2019-09-01 13:33:22"), value: 60 },
-        { time: new Date("2019-09-01 13:33:23"), value: 58 },
-        { time: new Date("2019-09-01 13:33:24"), value: 54 },
-        { time: new Date("2019-09-01 13:33:25"), value: 55 },
-        { time: new Date("2019-09-01 13:33:26"), value: 54 },
-        { time: new Date("2019-09-01 13:33:27"), value: 55 },
-        { time: new Date("2019-09-01 13:33:28"), value: 55 },
-        { time: new Date("2019-09-01 13:33:29"), value: 55 },
-        { time: new Date("2019-09-01 13:33:30"), value: 56 },
-        { time: new Date("2019-09-01 13:33:31"), value: 55 },
-        { time: new Date("2019-09-01 13:33:32"), value: 55 },
-        { time: new Date("2019-09-01 13:33:33"), value: 54 },
-        { time: new Date("2019-09-01 13:33:34"), value: 54 },
-        { time: new Date("2019-09-01 13:33:35"), value: 54 },
-        { time: new Date("2019-09-01 13:33:36"), value: 54 },
-        { time: new Date("2019-09-01 13:33:37"), value: 55 },
-        { time: new Date("2019-09-01 13:33:38"), value: 56 },
-        { time: new Date("2019-09-01 13:33:39"), value: 58 },
-        { time: new Date("2019-09-01 13:33:40"), value: 60 },
-        { time: new Date("2019-09-01 13:33:41"), value: 62 },
-        { time: new Date("2019-09-01 13:33:42"), value: 61 },
-        { time: new Date("2019-09-01 13:33:43"), value: 64 },
-        { time: new Date("2019-09-01 13:33:44"), value: 67 },
-        { time: new Date("2019-09-01 13:33:45"), value: 64 },
-        { time: new Date("2019-09-01 13:33:46"), value: 68 },
-        { time: new Date("2019-09-01 13:33:47"), value: 73 },
-        { time: new Date("2019-09-01 13:33:48"), value: 76 },
-        { time: new Date("2019-09-01 13:33:49"), value: 78 },
-        { time: new Date("2019-09-01 13:33:50"), value: 79 },
-        { time: new Date("2019-09-01 13:33:51"), value: 80 },
-        { time: new Date("2019-09-01 13:33:52"), value: 81 },
-        { time: new Date("2019-09-01 13:33:53"), value: 76 }
-      ]
+      area: 0
     };
+  },
+  props: {
+    temperatureGpuProp: Array
+  },
+  watch: {
+    temperatureGpuProp: function(val) {
+      this.svg.remove();
+      this.initGraph();
+    }
   },
   methods: {
     initGraph() {
-      console.log(this.dataGraph);
       this.width = 500 - this.margin.left - this.margin.right;
       this.height = 200 - this.margin.top - this.margin.bottom;
 
@@ -129,8 +72,8 @@ export default {
 
       this.x = d3Scale.scaleTime().range([0, this.width]);
       this.y = d3Scale.scaleLinear().range([this.height, 0]);
-      this.x.domain(d3Array.extent(this.dataGraph, d => d.time));
-      this.y.domain(d3Array.extent(this.dataGraph, d => d.value));
+      this.x.domain(d3Array.extent(this.temperatureGpuProp, d => d.time));
+      this.y.domain([30, 80]);
 
       this.svg
         .append("g")
@@ -163,11 +106,12 @@ export default {
 
       this.svg
         .append("path")
-        .datum(this.dataGraph)
+        .data([this.temperatureGpuProp])
         .style("fill", "steelblue")
         .style("fill-opacity", 0.3)
         .style("stroke", "none")
-        .attr("d", this.area);
+        .attr("d", this.area)
+        .attr("class", "data");
 
       this.line = d3Shape
         .line()
@@ -176,19 +120,15 @@ export default {
 
       this.svg
         .append("path")
-        .datum(this.dataGraph)
+        .data([this.temperatureGpuProp])
         .style("fill", "none")
         .style("stroke", "steelblue")
         .style("stroke-width", "1.5px")
-        .attr("d", this.line);
+        .attr("d", this.line)
+        .attr("class", "data");
     }
   },
   mounted() {
-    const axios = require("axios");
-    axios
-      .get("http://localhost:3000/url")
-      .then(response => (this.apiResponse = response.data));
-
     this.initGraph();
   }
 };
