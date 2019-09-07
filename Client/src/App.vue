@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <HelloWorld :key="keyvalue" />
+    <HelloWorld ref="graphComponent" :temperatureGpuProp="temperatureGpuProp" />
   </div>
 </template>
 
@@ -14,20 +14,42 @@ export default {
   },
   data() {
     return {
-      keyvalue: 0
+      temperatureGpuProp: []
     };
   },
   methods: {
-    updateKey() {
-      this.keyvalue += 1;
+    updateGpuTemperature() {
+      const axios = require("axios");
+
+      axios.get("http://localhost:3000/getGpuInfo").then(response => {
+        if (temperatureGpuProp.length == 0) {
+          var dateTime;
+          for (var i = -59; i < 0; i++) {
+            dateTime = new Date(response.data.timestamp);
+            temperatureGpuProp.push({
+              time: dateTime.setSeconds(dateTime.getSeconds() + i),
+              value: 0
+            });
+          }
+        } else {
+          temperatureGpuProp.shift();
+        }
+
+        temperatureGpuProp.push({
+          time: new Date(response.data.timestamp),
+          value: response.data.temperaturegpu
+        });
+      });
     }
   },
   created: function() {
-    /*const cron = require("node-cron");
+    const cron = require("node-cron");
     global.component = this;
+    global.temperatureGpuProp = this.temperatureGpuProp;
+
     cron.schedule("* * * * * *", function() {
-      component.updateKey();
-    });*/
+      component.updateGpuTemperature();
+    });
   }
 };
 </script>
