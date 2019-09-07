@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <HelloWorld ref="graphComponent" :temperatureGpuProp="temperatureGpuProp" />
+    <LineChart ref="graphComponent" v-if="temperatureGpuProp.length > 1" :dataReceived="temperatureGpuProp" />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import LineChart from "./components/LineChart";
 
 export default {
   name: "App",
   components: {
-    HelloWorld
+    LineChart
   },
   data() {
     return {
@@ -22,23 +22,19 @@ export default {
       const axios = require("axios");
 
       axios.get("http://localhost:3000/getGpuInfo").then(response => {
-        if (temperatureGpuProp.length == 0) {
-          var dateTime;
-          for (var i = -59; i < 0; i++) {
-            dateTime = new Date(response.data.timestamp);
-            temperatureGpuProp.push({
-              time: dateTime.setSeconds(dateTime.getSeconds() + i),
-              value: 0
-            });
-          }
-        } else {
+        var timeValueReceived = new Date(response.data.timestamp);
+        timeValueReceived.setMilliseconds(0);
+
+        while (temperatureGpuProp.length > 1 && (timeValueReceived - temperatureGpuProp[0].time) > 59000) {
           temperatureGpuProp.shift();
         }
 
-        temperatureGpuProp.push({
-          time: new Date(response.data.timestamp),
-          value: response.data.temperaturegpu
-        });
+        if (temperatureGpuProp.length == 0 || temperatureGpuProp[temperatureGpuProp.length - 1].time.getSeconds() != timeValueReceived.getSeconds()) {
+          temperatureGpuProp.push({
+            time: timeValueReceived,
+            value: response.data.temperaturegpu
+          });
+        }
       });
     }
   },
