@@ -1,7 +1,7 @@
 <template>
   <div class="graph" style="background-color: #212121">
-    <svg :id="chartID" width="30%" height="30%" />
-    <span>{{ title }}</span>
+    <svg :id="chartID" width="100%" height='1080px' />
+    <!--<h2>{{ title }}</h2>-->
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
     drawGraph() {
       // calcul the dimensions
       this.width = 600 - this.margin.left - this.margin.right;
-      this.height = 164 - this.margin.top - this.margin.bottom;
+      this.height = 200 - this.margin.top - this.margin.bottom;
 
       // define the graph area
       this.svg = d3
