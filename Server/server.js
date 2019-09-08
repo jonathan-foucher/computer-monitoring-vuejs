@@ -12,13 +12,19 @@ server.listen(3000, () => {
 });
 
 // get
-server.get("/url", (req, res, next) => {
-  dataGPU = updateGpuData(function (err, dataGPU) {
-    res.json(dataGPU);
+server.get("/getGpuInfo", (req, res, next) => {
+  dataGpu = getGpuData(function (err, dataGpu) {
+    var dataGpuArray = dataGpu.replace('\n', ', ').split(', ');
+   
+    var dataGpuJson = new Object();
+    for (var i = 0; i < dataGpuArray.length / 2; i++) {
+      dataGpuJson[dataGpuArray[i].replace('\r', '').replace('\n', '').replace('.', '')] = dataGpuArray[dataGpuArray.length / 2 + i].replace('\r', '').replace('\n', '');
+    }
+    res.json(dataGpuJson);
   });
 });
 
-function updateGpuData(callback) {
+function getGpuData(callback) {
   const { exec } = require("child_process");
   exec(
     "nvidia-smi --query-gpu=gpu_name,temperature.gpu,memory.used,memory.total,utilization.gpu,utilization.memory,timestamp --format=csv",
@@ -30,8 +36,3 @@ function updateGpuData(callback) {
     }
   );
 }
-
-// some other commands for later
-// wmic cpu get caption, deviceid, name, numberofcores, maxclockspeed, status
-// wmic OS get TotalVisibleMemorySize,FreePhysicalMemory
-// wmic diskdrive get name,size,model,description
