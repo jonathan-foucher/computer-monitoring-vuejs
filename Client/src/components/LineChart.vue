@@ -1,7 +1,7 @@
 <template>
   <div class="graph" style="background-color: #212121">
-    <svg id="svg-graph" viewBox="0 0 900 600" />
-    <p>Test</p>
+    <svg :id="chartID" width="30%" height="30%" />
+    <span>{{ title }}</span>
   </div>
 </template>
 
@@ -38,7 +38,9 @@ export default {
     };
   },
   props: {
-    dataReceived: Array
+    chartID: String,
+    dataReceived: Array,
+    title: String
   },
   watch: {
     dataReceived: function() {
@@ -50,11 +52,11 @@ export default {
     drawGraph() {
       // calcul the dimensions
       this.width = 600 - this.margin.left - this.margin.right;
-      this.height = 200 - this.margin.top - this.margin.bottom;
+      this.height = 164 - this.margin.top - this.margin.bottom;
 
       // define the graph area
       this.svg = d3
-        .selectAll("#svg-graph")
+        .selectAll("#" + this.chartID)
         .append("g")
         .attr(
           "transform",
@@ -152,22 +154,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-
 /* chart css style */
 .axis path,
 .axis line {
