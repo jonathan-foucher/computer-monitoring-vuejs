@@ -1,6 +1,7 @@
 <template>
-  <div id="app">
-    <LineChart ref="graphComponent" v-if="temperatureGpuProp.length > 1" :dataReceived="temperatureGpuProp" />
+  <div id="app" class="d-inline p-2" >
+    <LineChart ref="svg-graph-1'" v-if="temperatureGpuProp.length > 1" :chartID="'svg-graph-1'" :dataReceived="temperatureGpuProp" :title="'GPU Temperature'" />
+    <LineChart ref="svg-graph-2" v-if="temperatureGpuProp.length > 1" :chartID="'svg-graph-2'" :dataReceived="temperatureGpuProp" :title="'GPU Temperature2'" />
   </div>
 </template>
 
@@ -51,12 +52,4 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
