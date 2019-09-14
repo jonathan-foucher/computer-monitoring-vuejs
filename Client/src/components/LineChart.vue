@@ -1,6 +1,6 @@
 <template>
   <div class="graph" style="background-color: #212121">
-    <svg :id="chartID" width="100%" height='1080px' />
+    <svg :id="chartID" width="100%" height="300" />
     <!--<h2>{{ title }}</h2>-->
   </div>
 </template>
@@ -10,7 +10,6 @@
 import * as d3 from "d3-selection";
 import * as d3Scale from "d3-scale";
 import * as d3Shape from "d3-shape";
-import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
 import * as d3Time from "d3-time-format";
 
@@ -18,11 +17,11 @@ import * as d3Time from "d3-time-format";
 import localFrJSON from "@/assets/fr-FR.json";
 
 export default {
-  name: "LineChart",
+  name: "DonutChart",
   data() {
     return {
       localFr: localFrJSON,
-      margin: { top: 20, right: 20, bottom: 30, left: 50 },
+      margin: { top: 25, right: 25, bottom: 25, left: 25 },
       width: 0,
       height: 0,
       svg: 0,
@@ -51,7 +50,7 @@ export default {
   methods: {
     drawGraph() {
       // calcul the dimensions
-      this.width = 600 - this.margin.left - this.margin.right;
+      this.width = 620 - this.margin.left - this.margin.right;
       this.height = 200 - this.margin.top - this.margin.bottom;
 
       // define the graph area

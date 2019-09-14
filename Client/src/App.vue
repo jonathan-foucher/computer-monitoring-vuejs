@@ -3,13 +3,68 @@
     <b-container fluid>
       <b-row>
         <b-col>
+          <b-row>
+            <b-col>
+              <DonutChart
+                ref="svg-graph-1'"
+                v-if="temperatureGpuProp.length > 1"
+                :chartID="'svg-graph-1'"
+                :dataReceived="temperatureGpuProp"
+                :title="'GPU Temperature'"
+              />
+            </b-col>
+            <b-col>
+              <DonutChart
+                ref="svg-graph-1'"
+                v-if="temperatureGpuProp.length > 1"
+                :chartID="'svg-graph-1'"
+                :dataReceived="temperatureGpuProp"
+                :title="'GPU Temperature'"
+              />
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col>
           <LineChart
-            ref="svg-graph-1'"
+            ref="svg-graph-2"
             v-if="temperatureGpuProp.length > 1"
-            :chartID="'svg-graph-1'"
+            :chartID="'svg-graph-2'"
             :dataReceived="temperatureGpuProp"
-            :title="'GPU Temperature'"
+            :title="'GPU Temperature2'"
           />
+        </b-col>
+        <b-col>
+          <LineChart
+            ref="svg-graph-3"
+            v-if="temperatureGpuProp.length > 1"
+            :chartID="'svg-graph-3'"
+            :dataReceived="temperatureGpuProp"
+            :title="'GPU Temperature3'"
+          />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-row>
+            <b-col>
+              <DonutChart
+                ref="svg-graph-1'"
+                v-if="temperatureGpuProp.length > 1"
+                :chartID="'svg-graph-1'"
+                :dataReceived="temperatureGpuProp"
+                :title="'GPU Temperature'"
+              />
+            </b-col>
+            <b-col>
+              <DonutChart
+                ref="svg-graph-1'"
+                v-if="temperatureGpuProp.length > 1"
+                :chartID="'svg-graph-1'"
+                :dataReceived="temperatureGpuProp"
+                :title="'GPU Temperature'"
+              />
+            </b-col>
+          </b-row>
         </b-col>
         <b-col>
           <LineChart
@@ -36,11 +91,13 @@
 
 <script>
 import LineChart from "./components/LineChart";
+import DonutChart from "./components/DonutChart";
 
 export default {
   name: "App",
   components: {
-    LineChart
+    LineChart,
+    DonutChart
   },
   data() {
     return {
@@ -88,7 +145,4 @@ export default {
 </script>
 
 <style>
-.col {
-  flex: 1 0 30%;
-}
 </style>
