@@ -14,11 +14,11 @@
         </b-col>
         <b-col>
           <DonutChart
-            ref="svg-graph-gup-ram-usage'"
+            ref="svg-graph-gup-memory-usage"
             v-if="temperatureGpuProp.length > 1"
-            :chartID="'svg-graph-gup-ram-usage'"
-            :dataReceived="temperatureGpuProp"
-            :title="'GPU Ram usage %'"
+            :chartID="'svg-graph-gup-memory-usage'"
+            :dataReceived="usageGpuMemoryProp"
+            :title="'GPU memory usage %'"
           />
         </b-col>
         <b-col>
@@ -27,7 +27,7 @@
             v-if="temperatureGpuProp.length > 1"
             :chartID="'svg-graph-gpu-temp'"
             :dataReceived="temperatureGpuProp"
-            :title="'GPU Temperature'"
+            :title="'GPU Temperature °C'"
             :yScaling="'auto'"
           />
         </b-col>
@@ -49,7 +49,8 @@ export default {
   data() {
     return {
       temperatureGpuProp: [],
-      usageGpuProp: []
+      usageGpuProp: [],
+      usageGpuMemoryProp: []
     };
   },
   methods: {
@@ -83,6 +84,10 @@ export default {
             time: timeValueReceived,
             value: parseInt(response.data.utilizationgpu.substr(0, response.data.utilizationgpu.length - 2))
           });
+
+          usageGpuMemoryProp[0] = response.data.utilizationmemory.substr(0, response.data.utilizationmemory.length - 2);
+          usageGpuMemoryProp[1] = response.data.memoryused;
+          usageGpuMemoryProp[2] = response.data.memorytotal;
         }
       });
     }
@@ -92,6 +97,7 @@ export default {
     global.component = this;
     global.temperatureGpuProp = this.temperatureGpuProp;
     global.usageGpuProp = this.usageGpuProp;
+    global.usageGpuMemoryProp = this.usageGpuMemoryProp;
 
     cron.schedule("* * * * * *", function() {
       component.updateGpuInfo();
