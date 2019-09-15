@@ -50,14 +50,14 @@ export default {
           "translate(" + (this.width / 2 + this.margin.left) + "," + (this.height / 2 + this.margin.top) + ")"
         );;
 
-      const dataset = { A: 15, B: 20 };
+      const dataset = { val: this.dataReceived[0], remain: (100 - this.dataReceived[0]) };
 
       const color = d3Scale
         .scaleOrdinal()
         .domain(dataset)
-        .range(["#DA3C78", "#8E44AD"]);
+        .range(["#4682B4", "#696969"]);
 
-      const pie = d3Shape.pie().value(d => d.value);
+      const pie = d3Shape.pie().value(d => d.value).sort(null);
 
       const arc = d3Shape
         .arc()

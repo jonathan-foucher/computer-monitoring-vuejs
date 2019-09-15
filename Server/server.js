@@ -16,11 +16,11 @@ server.listen(3000, () => {
 // get response for gpu info
 server.get("/getGpuInfo", (req, res, next) => {
   dataGpu = getGpuData(function (err, dataGpu) {
-    var dataGpuArray = dataGpu.replace('\n', ', ').replace(' [%]', '').split(', ');
+    var dataGpuArray = dataGpu.replace('\n', ', ').split(', ');
    
     var dataGpuJson = new Object();
     for (var i = 0; i < dataGpuArray.length / 2; i++) {
-      dataGpuJson[dataGpuArray[i].replace('\r', '').replace('\n', '').replace('.', '')] = dataGpuArray[dataGpuArray.length / 2 + i].replace('\r', '').replace('\n', '');
+      dataGpuJson[dataGpuArray[i].replace(' [%]', '').replace(' [MiB]', '').replace('\r', '').replace('\n', '').replace('.', '')] = dataGpuArray[dataGpuArray.length / 2 + i].replace('\r', '').replace('\n', '');
     }
     res.json(dataGpuJson);
   });
