@@ -39,7 +39,8 @@ export default {
   props: {
     chartID: String,
     dataReceived: Array,
-    title: String
+    title: String,
+    yScaling: String
   },
   watch: {
     dataReceived: function() {
@@ -84,18 +85,23 @@ export default {
       ]);
 
       // calcul the y domain
-      var minY = Math.min.apply(
-        Math,
-        this.dataReceived.map(function(o) {
-          return parseInt(o.value) - 5;
-        })
-      );
-      var maxY = Math.max.apply(
-        Math,
-        this.dataReceived.map(function(o) {
-          return parseInt(o.value) + 5;
-        })
-      );
+      if(this.yScaling == "auto") {
+        var minY = Math.min.apply(
+          Math,
+          this.dataReceived.map(function(o) {
+            return parseInt(o.value) - 5;
+          })
+        );
+        var maxY = Math.max.apply(
+          Math,
+          this.dataReceived.map(function(o) {
+            return parseInt(o.value) + 5;
+          })
+        );
+        } else if(this.yScaling == "%") {
+          var minY = 0;
+          var maxY = 100;
+        }
       this.y.domain([minY, maxY]);
 
       // draw the x axis
