@@ -3,85 +3,32 @@
     <b-container fluid>
       <b-row>
         <b-col>
-          <b-row>
-            <b-col>
-              <DonutChart
-                ref="svg-graph-1'"
-                v-if="temperatureGpuProp.length > 1"
-                :chartID="'svg-graph-1'"
-                :dataReceived="temperatureGpuProp"
-                :title="'GPU Temperature'"
-              />
-            </b-col>
-            <b-col>
-              <DonutChart
-                ref="svg-graph-1'"
-                v-if="temperatureGpuProp.length > 1"
-                :chartID="'svg-graph-1'"
-                :dataReceived="temperatureGpuProp"
-                :title="'GPU Temperature'"
-              />
-            </b-col>
-          </b-row>
+          <LineChart
+            ref="svg-graph-gpu-usage"
+            v-if="temperatureGpuProp.length > 1"
+            :chartID="'svg-graph-gpu-usage'"
+            :dataReceived="usageGpuProp"
+            :title="'GPU usage %'"
+            :yScaling="'%'"
+          />
         </b-col>
         <b-col>
-          <LineChart
-            ref="svg-graph-2"
+          <DonutChart
+            ref="svg-graph-gup-ram-usage'"
             v-if="temperatureGpuProp.length > 1"
-            :chartID="'svg-graph-2'"
+            :chartID="'svg-graph-gup-ram-usage'"
             :dataReceived="temperatureGpuProp"
-            :title="'GPU Temperature2'"
+            :title="'GPU Ram usage %'"
           />
         </b-col>
         <b-col>
           <LineChart
-            ref="svg-graph-3"
+            ref="svg-graph-gpu-temp"
             v-if="temperatureGpuProp.length > 1"
-            :chartID="'svg-graph-3'"
+            :chartID="'svg-graph-gpu-temp'"
             :dataReceived="temperatureGpuProp"
-            :title="'GPU Temperature3'"
-          />
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-row>
-            <b-col>
-              <DonutChart
-                ref="svg-graph-1'"
-                v-if="temperatureGpuProp.length > 1"
-                :chartID="'svg-graph-1'"
-                :dataReceived="temperatureGpuProp"
-                :title="'GPU Temperature'"
-              />
-            </b-col>
-            <b-col>
-              <DonutChart
-                ref="svg-graph-1'"
-                v-if="temperatureGpuProp.length > 1"
-                :chartID="'svg-graph-1'"
-                :dataReceived="temperatureGpuProp"
-                :title="'GPU Temperature'"
-              />
-            </b-col>
-          </b-row>
-        </b-col>
-        <b-col>
-          <LineChart
-            ref="svg-graph-2"
-            v-if="temperatureGpuProp.length > 1"
-            :chartID="'svg-graph-2'"
-            :dataReceived="temperatureGpuProp"
-            :title="'GPU Temperature2'"
-          />
-        </b-col>
-        <b-col>
-          <LineChart
-            ref="svg-graph-3"
-            v-if="temperatureGpuProp.length > 1"
-            :chartID="'svg-graph-3'"
-            :dataReceived="temperatureGpuProp"
-            :title="'GPU Temperature3'"
+            :title="'GPU Temperature'"
+            :yScaling="'auto'"
           />
         </b-col>
       </b-row>
@@ -101,14 +48,16 @@ export default {
   },
   data() {
     return {
-      temperatureGpuProp: []
+      temperatureGpuProp: [],
+      usageGpuProp: []
     };
   },
   methods: {
-    updateGpuTemperature() {
+    updateGpuInfo() {
       const axios = require("axios");
 
       axios.get("http://localhost:3000/getGpuInfo").then(response => {
+        // extract gpu info
         var timeValueReceived = new Date(response.data.timestamp);
         timeValueReceived.setMilliseconds(0);
 
@@ -117,6 +66,7 @@ export default {
           timeValueReceived - temperatureGpuProp[0].time > 59000
         ) {
           temperatureGpuProp.shift();
+          usageGpuProp.shift();
         }
 
         if (
@@ -128,6 +78,11 @@ export default {
             time: timeValueReceived,
             value: response.data.temperaturegpu
           });
+
+          usageGpuProp.push({
+            time: timeValueReceived,
+            value: parseInt(response.data.utilizationgpu.substr(0, response.data.utilizationgpu.length - 2))
+          });
         }
       });
     }
@@ -136,9 +91,10 @@ export default {
     const cron = require("node-cron");
     global.component = this;
     global.temperatureGpuProp = this.temperatureGpuProp;
+    global.usageGpuProp = this.usageGpuProp;
 
     cron.schedule("* * * * * *", function() {
-      component.updateGpuTemperature();
+      component.updateGpuInfo();
     });
   }
 };
