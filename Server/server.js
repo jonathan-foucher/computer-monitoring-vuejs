@@ -45,13 +45,14 @@ function getGpuData(callback) {
 // get response for cpu info
 server.get("/getCpuInfo", (req, res, next) => {
   dataCpu = getCpuData(function (err, dataCpu) {
-    console.log(dataCpu);
-    var dataCpuArray = dataCpu.replace('\n', ', ').replace(/(?:\\[rn]|[\r\n]+)+/g, "").split(', ');
+    var dataCpuArray = dataCpu.replace('\n', ', ').replace(/(?:\\[rn]|[\r\n]+)+/g, "").split(',');
 
     var dataCpuJson = new Object();
     for (var i = 0; i < dataCpuArray.length / 2; i++) {
       dataCpuJson[dataCpuArray[i].replace('/.//g', '')] = dataCpuArray[dataCpuArray.length / 2 + i];
     }
+
+    dataCpuJson["dateTime"] = Date.now();
     res.json(dataCpuJson);
   });
 });
