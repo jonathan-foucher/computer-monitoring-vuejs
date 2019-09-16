@@ -17,11 +17,11 @@ server.listen(3000, () => {
 // get response for gpu info
 server.get("/getGpuInfo", (req, res, next) => {
   dataGpu = getGpuData(function (err, dataGpu) {
-    var dataGpuArray = dataGpu.replace('\n', ', ').split(', ');
+    var dataGpuArray = dataGpu.replace('\n', ', ').replace(/(?:\\[rn]|[\r\n]+)+/g, "").split(', ');
 
     var dataGpuJson = new Object();
     for (var i = 0; i < dataGpuArray.length / 2; i++) {
-      dataGpuJson[dataGpuArray[i].replace(' [%]', '').replace(' [MiB]', '').replace('\r', '').replace('\n', '').replace('.', '')] = dataGpuArray[dataGpuArray.length / 2 + i].replace('\r', '').replace('\n', '');
+      dataGpuJson[dataGpuArray[i].replace(' [%]', '').replace(' [MiB]', '').replace('.', '')] = dataGpuArray[dataGpuArray.length / 2 + i];
     }
     res.json(dataGpuJson);
   });
@@ -45,11 +45,12 @@ function getGpuData(callback) {
 // get response for cpu info
 server.get("/getCpuInfo", (req, res, next) => {
   dataCpu = getCpuData(function (err, dataCpu) {
-    var dataCpuArray = dataCpu.replace('\n', ', ').split(', ');
+    console.log(dataCpu);
+    var dataCpuArray = dataCpu.replace('\n', ', ').replace(/(?:\\[rn]|[\r\n]+)+/g, "").split(', ');
 
     var dataCpuJson = new Object();
     for (var i = 0; i < dataCpuArray.length / 2; i++) {
-      dataCpuJson[dataCpuArray[i].replace(' [%]', '').replace(' [MiB]', '').replace('\r', '').replace('\n', '').replace('.', '')] = dataCpuArray[dataCpuArray.length / 2 + i].replace('\r', '').replace('\n', '');
+      dataCpuJson[dataCpuArray[i].replace('/.//g', '')] = dataCpuArray[dataCpuArray.length / 2 + i];
     }
     res.json(dataCpuJson);
   });
