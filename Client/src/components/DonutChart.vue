@@ -27,7 +27,8 @@ export default {
   props: {
     chartID: String,
     dataReceived: Array,
-    title: String
+    title: String,
+    limits: Object
   },
   watch: {
     dataReceived: function() {
@@ -52,10 +53,29 @@ export default {
 
       const dataset = { val: this.dataReceived[0], remain: (100 - this.dataReceived[0]) };
 
+      // color calculation
+      const percent = this.dataReceived[0] / 100;
+
+      const red = this.calculateColor(
+        this.limits.minR,
+        this.limits.maxR,
+        percent
+      );
+      const green = this.calculateColor(
+        this.limits.minG,
+        this.limits.maxG,
+        percent
+      );
+      const blue = this.calculateColor(
+        this.limits.minB,
+        this.limits.maxB,
+        percent
+      );
+
       const color = d3Scale
         .scaleOrdinal()
         .domain(dataset)
-        .range(["#4682B4", "#696969"]);
+        .range(["rgb(" + red + "," + green + "," + blue + ")", "#696969"]);
 
       const pie = d3Shape.pie().value(d => d.value).sort(null);
 
@@ -80,6 +100,9 @@ export default {
         .attr("transform", d => "translate(" + arc.centroid(d) + ")")
         .text(d => d.data.key)
         .attr("fill", "white");*/
+    },
+    calculateColor(min, max, percent) {
+      return parseInt(min + (max - min) * percent);
     }
   },
   mounted() {

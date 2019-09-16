@@ -40,7 +40,8 @@ export default {
     chartID: String,
     dataReceived: Array,
     title: String,
-    yScaling: String
+    yScaling: String,
+    limits: Object
   },
   watch: {
     dataReceived: function() {
@@ -85,7 +86,7 @@ export default {
       ]);
 
       // calcul the y domain
-      if(this.yScaling == "auto") {
+      if (this.yScaling == "auto") {
         var minY = Math.min.apply(
           Math,
           this.dataReceived.map(function(o) {
@@ -98,10 +99,10 @@ export default {
             return parseInt(o.value) + 5;
           })
         );
-        } else if(this.yScaling == "%") {
-          var minY = 0;
-          var maxY = 100;
-        }
+      } else if (this.yScaling == "%") {
+        var minY = 0;
+        var maxY = 100;
+      }
       this.y.domain([minY, maxY]);
 
       // draw the x axis
@@ -124,11 +125,36 @@ export default {
         .style("color", "white")
         .call(d3Axis.axisLeft(this.y).ticks(2));
 
+      // color calculation
+      const lastValue = this.dataReceived[this.dataReceived.length - 1].value;
+      
+      let percent = ((lastValue - this.limits.min) / (this.limits.max - this.limits.min));
+
+      if (percent > 1) {
+        percent = 1;
+      }
+
+      const red = this.calculateColor(
+        this.limits.minR,
+        this.limits.maxR,
+        percent
+      );
+      const green = this.calculateColor(
+        this.limits.minG,
+        this.limits.maxG,
+        percent
+      );
+      const blue = this.calculateColor(
+        this.limits.minB,
+        this.limits.maxB,
+        percent
+      );
+
       // draw the area under the line
       this.svg
         .append("path")
         .data([this.dataReceived])
-        .style("fill", "steelblue")
+        .style("fill", "rgb(" + red + "," + green + "," + blue + ")")
         .style("fill-opacity", 0.35)
         .style("stroke", "none")
         .attr("d", this.area)
@@ -145,10 +171,13 @@ export default {
         .append("path")
         .data([this.dataReceived])
         .style("fill", "none")
-        .style("stroke", "steelblue")
+        .style("stroke", "rgb(" + red + "," + green + "," + blue + ")")
         .style("stroke-width", "1.5px")
         .attr("d", this.line)
         .attr("class", "data");
+    },
+    calculateColor(min, max, percent) {
+      return parseInt(min + (max - min) * percent);
     }
   },
   mounted() {
@@ -172,25 +201,7 @@ export default {
 }
 
 .area {
-  fill: steelblue;
   stroke: none;
   opacity: 0.3;
-}
-
-.zeroline {
-  fill: none;
-  stroke: red;
-  stroke-width: 0.5px;
-  stroke-dasharray: 5 5;
-}
-
-.zerolinetext {
-  fill: red;
-}
-
-.circle {
-  fill: white;
-  stroke: steelblue;
-  stroke-width: 2px;
 }
 </style>

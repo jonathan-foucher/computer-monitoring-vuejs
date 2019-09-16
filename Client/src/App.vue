@@ -10,6 +10,7 @@
             :dataReceived="usageGpuProp"
             :title="'GPU usage %'"
             :yScaling="'%'"
+            :limits="{ min: 0, max: 100, minR: 0, minG: 255, minB: 0, maxR: 255, maxG: 127, maxB: 0 }"
           />
         </b-col>
         <b-col>
@@ -19,6 +20,7 @@
             :chartID="'svg-graph-gup-memory-usage'"
             :dataReceived="usageGpuMemoryProp"
             :title="'GPU memory usage %'"
+            :limits="{ min: 0, max: 100, minR: 0, minG: 255, minB: 0, maxR: 255, maxG: 127, maxB: 0 }"
           />
         </b-col>
         <b-col>
@@ -29,6 +31,7 @@
             :dataReceived="temperatureGpuProp"
             :title="'GPU Temperature °C'"
             :yScaling="'auto'"
+            :limits="{ min: 40, max: 70, minR: 0, minG: 255, minB: 0, maxR: 255, maxG: 0, maxB: 0 }"
           />
         </b-col>
       </b-row>
@@ -85,9 +88,10 @@ export default {
             value: parseInt(response.data.utilizationgpu.substr(0, response.data.utilizationgpu.length - 2))
           });
 
-          usageGpuMemoryProp[0] = response.data.utilizationmemory.substr(0, response.data.utilizationmemory.length - 2);
-          usageGpuMemoryProp[1] = response.data.memoryused;
-          usageGpuMemoryProp[2] = response.data.memorytotal;
+          usageGpuMemoryProp.length = 0;
+          usageGpuMemoryProp.push(response.data.utilizationmemory.substr(0, response.data.utilizationmemory.length - 2));
+          usageGpuMemoryProp.push(response.data.memoryused);
+          usageGpuMemoryProp.push(response.data.memorytotal);
         }
       });
     }
