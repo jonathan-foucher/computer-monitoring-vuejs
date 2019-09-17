@@ -73,9 +73,13 @@ function getCpuData(callback) {
 // get response for ram info
 server.get('/getRamInfo', (req, res, next) => {
   dataRam = getRamData(function (err, dataRam) {
-    var dataRamArray = dataRam.replace(/DESKTOP/g, ',DESKTOP').replace(/(?:\\[rn]|[\r\n]+)+/g, '').split(',');
+    var dataRamArray = dataRam.replace(/FreePhysicalMemory/g, 'FreePhysicalMemory,').replace(/DESKTOP/g, ',DESKTOP').replace(/(?:\\[rn]|[\r\n]+)+/g, '').split(',');
 
     var dataRamJson = new Object();
+    dataRamJson[dataRamArray[0].replace('/.//g', '')] = dataRamArray[1].replace(/ /g, '');
+    dataRamArray.shift();
+    dataRamArray.shift();
+
     for (var i = 0; i < dataRamArray.length / 3; i++) {
       dataRamJson[dataRamArray[i].replace('/.//g', '') + '0'] = dataRamArray[dataRamArray.length / 3 + i];
       dataRamJson[dataRamArray[i].replace('/.//g', '') + '1'] = dataRamArray[2 * dataRamArray.length / 3 + i];
@@ -89,7 +93,7 @@ server.get('/getRamInfo', (req, res, next) => {
 // get the ram info from the system
 function getRamData(callback) {
   exec(
-    'wmic memorychip get capacity,configuredclockspeed,configuredvoltage,description,speed /format:csv',
+    'wmic os get freephysicalmemory && echo , && wmic memorychip get capacity,configuredclockspeed,configuredvoltage,description,speed /format:csv',
     (err, stdout, stderr) => {
       if (err) {
         console.log(stderr);
