@@ -29,7 +29,6 @@ server.get("/getGpuInfo", (req, res, next) => {
 
 // get the gpu info from the system
 function getGpuData(callback) {
-
   exec(
     "nvidia-smi --query-gpu=gpu_name,temperature.gpu,memory.used,memory.total,utilization.gpu,utilization.memory,timestamp --format=csv",
     (err, stdout, stderr) => {
@@ -59,9 +58,37 @@ server.get("/getCpuInfo", (req, res, next) => {
 
 // get the cpu info from the system
 function getCpuData(callback) {
-
   exec(
     "wmic cpu get /format:csv",
+    (err, stdout, stderr) => {
+      if (err) {
+        console.log(stderr);
+      }
+      return callback(null, stdout);
+    }
+  );
+}
+
+// ====> RAM <====
+// get response for ram info
+server.get("/getRamInfo", (req, res, next) => {
+  dataRam = getRamData(function (err, dataRam) {
+    var dataRamArray = dataRam.replace('WindowsDirectory', 'WindowsDirectory,').replace(/(?:\\[rn]|[\r\n]+)+/g, "").split(',');
+
+    var dataRamJson = new Object();
+    for (var i = 0; i < dataRamArray.length / 2; i++) {
+      dataRamJson[dataRamArray[i].replace('/.//g', '')] = dataRamArray[dataRamArray.length / 2 + i];
+    }
+
+    dataRamJson["dateTime"] = Date.now();
+    res.json(dataRamJson);
+  });
+});
+
+// get the ram info from the system (OS informations including ram informations)
+function getRamData(callback) {
+  exec(
+    "wmic OS get /format:csv",
     (err, stdout, stderr) => {
       if (err) {
         console.log(stderr);
