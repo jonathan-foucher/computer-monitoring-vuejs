@@ -1,14 +1,10 @@
-.DS_Store
-node_modules/
-/dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Python
+__pycache__/
 
-# Editor directories and files
-.idea
+# Vuejs
+node_modules/
+npm-debug.log
+dist/
+
+# Visual Studio Code
 .vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
