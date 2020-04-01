@@ -30,7 +30,6 @@ export default {
         labels: this.dates,
         datasets: [
           {
-            label: 'Avg. Temp',
             backgroundColor: 'rgba(54, 162, 235, 0.3)',
             borderColor: 'rgb(54, 162, 235)',
             fill: true,
