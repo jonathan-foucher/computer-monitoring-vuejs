@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="chartName"></canvas>
+  <canvas :id="name"></canvas>
 </template>
 
 <script>
@@ -7,10 +7,14 @@ import { Chart } from 'chart.js';
 
 export default {
   props: {
-    chartName: {
+    name: {
       type: String,
       required: true,
     },
+    title: {
+      required: true,
+      default: ''
+    }
   },
   data() {
     return {
@@ -19,7 +23,7 @@ export default {
     }
   },
   mounted() {
-    var ctx = document.getElementById(this.chartName);
+    var ctx = document.getElementById(this.name);
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -38,7 +42,7 @@ export default {
       options: {
         title: {
           display: true,
-          text: 'Temperature with Chart.js'
+          text: this.title
         },
         responsive: true,
         layout: {
