@@ -13,7 +13,7 @@ app = socketio.WSGIApp(sio)
 def listen():
     while True:
         myData.update()
-        sio.emit('test', myData.toJSON())
+        sio.emit('data', myData.toJSON())
         eventlet.sleep(1)
 
 eventlet.spawn(listen)

@@ -1,5 +1,6 @@
 import wmi
 import json
+import time
 
 # number of values in arrays => 60 for 1 minute history of values
 NB_VALUES_ARRAY = 60
@@ -12,20 +13,18 @@ class DataToSend:
         self.cpu = Cpu()
         self.gpu = Gpu()
         self.ram = Ram()
-        self.ssd1 = Disk('KINGSTON SA400S37480G', '/hdd/0')
-        self.ssd2 = Disk('KINGSTON SV300S37A120G', '/hdd/2')
-        self.hdd1 = Disk('WDC WD10EZEX-08M2NA0', '/hdd/1')
+        self.ssd1 = Disk('SSD Kingston 480 Go', '/hdd/0')
+        self.ssd2 = Disk('SSD Kingston 120 Go', '/hdd/2')
+        self.hdd1 = Disk('HDD WD 930 Go', '/hdd/1')
 
     def update(self):
         sensors = ohm.Sensor()
 
         # CPU
-        if(len(self.cpu.load) == NB_VALUES_ARRAY):
-            self.cpu.load.pop(0)
+        self.cpu.load.pop(0)
         self.cpu.load.append(next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Total'), None))
 
-        if(len(self.cpu.temperatures) == NB_VALUES_ARRAY):
-            self.cpu.temperatures.pop(0)
+        self.cpu.temperatures.pop(0)
         self.cpu.temperatures.append(next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Temperature' and sensor.Name == 'CPU Core'), None))
 
         self.cpu.loadCore1 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #1'), self.cpu.loadCore1)
@@ -36,12 +35,10 @@ class DataToSend:
         self.cpu.loadCore6 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #6'), self.cpu.loadCore6)
 
         # GPU
-        if(len(self.gpu.load) == NB_VALUES_ARRAY):
-            self.gpu.load.pop(0)
+        self.gpu.load.pop(0)
         self.gpu.load.append(next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'GPU Core'), None))
 
-        if(len(self.gpu.temperatures) == NB_VALUES_ARRAY):
-            self.gpu.temperatures.pop(0)
+        self.gpu.temperatures.pop(0)
         self.gpu.temperatures.append(next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Temperature' and sensor.Name == 'GPU Core'), None))
 
         self.gpu.ramLoad = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'GPU Memory'), self.gpu.ramLoad)
@@ -61,10 +58,12 @@ class DataToSend:
 
 class Cpu:
     def __init__(self):
-        
-
         self.load = []
         self.temperatures = []
+
+        for i in range(NB_VALUES_ARRAY):
+            self.load.append(None)
+            self.temperatures.append(None)
 
         self.loadCore1 = None
         self.loadCore2 = None
@@ -77,6 +76,11 @@ class Gpu:
     def __init__(self):
         self.load = []
         self.temperatures = []
+
+        for i in range(NB_VALUES_ARRAY):
+            self.load.append(None)
+            self.temperatures.append(None)
+        
         self.ramLoad = None
 
 class Ram:
