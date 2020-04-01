@@ -47,7 +47,7 @@ export default {
     LineChart,
     DonutChart,
     RadarChart,
-  }
+  },
 }
 </script>
 

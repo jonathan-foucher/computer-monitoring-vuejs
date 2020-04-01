@@ -4,6 +4,7 @@
 
 <script>
 import { Chart } from 'chart.js';
+import { mapState } from 'vuex';
 
 export default {
   props: {
@@ -12,18 +13,34 @@ export default {
       required: true,
     },
     title: {
-      required: true,
+      required: false,
       default: ''
     }
   },
+  computed: {
+    ...mapState({
+      dataset: 'data',
+    }),
+  },
   data() {
     return {
-      dataset: [42, 48, 52, 40, 40, 45, 60, 55, 50, 45, 47, 43, 47, 45, 43, 42, 48, 45, 43, 43],
-      dates: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+      chart: undefined,
+      dates: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
     }
+  },
+  watch: {
+    'dataset': {
+      immediate: false,
+      deep: true,
+      handler(newValue) {
+        this.chart.data.datasets[0].data = newValue;
+        this.chart.update();
+      },
+    },
   },
   mounted() {
     var ctx = document.getElementById(this.name);
+    
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -42,6 +59,9 @@ export default {
         title: {
           display: true,
           text: this.title
+        },
+        animation: {
+          duration: 0,
         },
         responsive: true,
         layout: {

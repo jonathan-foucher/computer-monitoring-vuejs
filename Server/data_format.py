@@ -54,7 +54,7 @@ class DataToSend:
         self.hdd1.usedSpace = next((round(sensor.Value, 2) for sensor in sensors if self.hdd1.parent == sensor.Parent and sensor.Name == 'Used Space'), self.hdd1.usedSpace)
 
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4, separators=(',', ':'))
 
 class Cpu:
     def __init__(self):
