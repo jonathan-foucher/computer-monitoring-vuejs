@@ -11,6 +11,11 @@ export default {
   name: 'App',
   components: {
     Dashboard,
+  },
+  created() {
+    this.sockets.subscribe('data', data => {
+      this.$store.dispatch('updateData', JSON.parse(data));
+    });
   }
 }
 </script>
