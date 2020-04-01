@@ -8,7 +8,7 @@
           <DonutChart name="test2" title="test2"/>
         </v-col>
         <v-col>
-         <LineChart name="test3" />
+         <RadarChart name="test3" />
         </v-col>
       </v-row>
       <v-row>
@@ -37,14 +37,16 @@
 </template>
 
 <script>
-import LineChart from './charts/LineChart'
-import DonutChart from './charts/DonutChart'
+import LineChart from './charts/LineChart';
+import DonutChart from './charts/DonutChart';
+import RadarChart from './charts/RadarChart';
 
 export default {
   name: 'Dashboard',
   components: {
     LineChart,
     DonutChart,
+    RadarChart,
   }
 }
 </script>
