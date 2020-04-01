@@ -2,35 +2,35 @@
   <v-container fluid>
       <v-row>
         <v-col>
-          <LineChart chartName="test1" />
+          <LineChart name="test1" title="test1"/>
         </v-col>
         <v-col>
-          <LineChart chartName="test2" />
+          <DonutChart name="test2" title="test2"/>
         </v-col>
         <v-col>
-         <LineChart chartName="test3" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <LineChart chartName="test4" />
-        </v-col>
-        <v-col>
-          <LineChart chartName="test5" />
-        </v-col>
-        <v-col>
-          <LineChart chartName="test6" />
+         <LineChart name="test3" />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <LineChart chartName="test7" />
+          <LineChart name="test4" />
         </v-col>
         <v-col>
-          <LineChart chartName="test8" />
+          <LineChart name="test5" />
         </v-col>
         <v-col>
-          <LineChart chartName="test9" />
+          <LineChart name="test6" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <LineChart name="test7" />
+        </v-col>
+        <v-col>
+          <LineChart name="test8" />
+        </v-col>
+        <v-col>
+          <LineChart name="test9" />
         </v-col>
       </v-row>
     </v-container>
@@ -38,11 +38,13 @@
 
 <script>
 import LineChart from './charts/LineChart'
+import DonutChart from './charts/DonutChart'
 
 export default {
   name: 'Dashboard',
   components: {
     LineChart,
+    DonutChart,
   }
 }
 </script>

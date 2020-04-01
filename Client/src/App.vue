@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Dashboard from "./components/Dashboard.vue";
+import Dashboard from "./components/Dashboard";
 
 export default {
   name: 'App',
@@ -19,7 +19,7 @@ export default {
   body {
     background: #1d2022;
   }
-  
+
   body::-webkit-scrollbar {
     display: none;
   }
