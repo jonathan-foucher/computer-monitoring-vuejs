@@ -26,7 +26,7 @@ export default {
 
 <style>
   #app {
-    background: #1d2022;
+    background: #0f1011;
   }
 
   body::-webkit-scrollbar {
