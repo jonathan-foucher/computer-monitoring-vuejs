@@ -6,7 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    data: [],
+    cpuTemperatures: [],
+    time: [],
   },
   actions: {
     updateData({ commit }, data) {
@@ -15,7 +16,8 @@ export default new Vuex.Store({
   },
   mutations: {
     updateData(state, data) {
-      state.data = cloneDeep(data.cpu.temperatures);
+      state.cpuTemperatures = cloneDeep(data.cpu.temperatures);
+      state.time = cloneDeep(data.time);
     },
   },
 });
