@@ -2,7 +2,7 @@
   <v-container fluid>
       <v-row>
         <v-col>
-          <LineChart name="test1" title="test1"/>
+          <LineChart stateName="cpuTemperatures" name="test1" title="test1" />
         </v-col>
         <v-col>
           <DonutChart name="test2" title="test2"/>
@@ -13,24 +13,24 @@
       </v-row>
       <v-row>
         <v-col>
-          <LineChart name="test4" />
+          <LineChart stateName="cpuTemperatures" name="test4" />
         </v-col>
         <v-col>
-          <LineChart name="test5" />
+          <LineChart stateName="cpuTemperatures" name="test5" />
         </v-col>
         <v-col>
-          <LineChart name="test6" />
+          <LineChart stateName="cpuTemperatures" name="test6" />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <LineChart name="test7" />
+          <LineChart stateName="cpuTemperatures" name="test7" />
         </v-col>
         <v-col>
-          <LineChart name="test8" />
+          <LineChart stateName="cpuTemperatures" name="test8" />
         </v-col>
         <v-col>
-          <LineChart name="test9" />
+          <LineChart stateName="cpuTemperatures" name="test9" />
         </v-col>
       </v-row>
     </v-container>
