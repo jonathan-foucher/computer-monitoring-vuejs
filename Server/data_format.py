@@ -5,6 +5,8 @@ import time
 # number of values in arrays => 60 for 1 minute history of values
 NB_VALUES_ARRAY = 60
 
+NB_CPU_CORES = 6
+
 # wmi to get the data
 ohm = wmi.WMI(namespace='root\OpenHardwareMonitor')
 
@@ -35,12 +37,9 @@ class DataToSend:
             self.cpu.temperatures.pop(0)
         self.cpu.temperatures.append(next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Temperature' and sensor.Name == 'CPU Core'), None))
 
-        self.cpu.loadCore1 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #1'), self.cpu.loadCore1)
-        self.cpu.loadCore2 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #2'), self.cpu.loadCore2)
-        self.cpu.loadCore3 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #3'), self.cpu.loadCore3)
-        self.cpu.loadCore4 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #4'), self.cpu.loadCore4)
-        self.cpu.loadCore5 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #5'), self.cpu.loadCore5)
-        self.cpu.loadCore6 = next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #6'), self.cpu.loadCore6)
+        self.cpu.coresLoad
+        for i in range(0, NB_CPU_CORES):
+            self.cpu.coresLoad[i] = (next((round(sensor.Value, 2) for sensor in sensors if sensor.SensorType == 'Load' and sensor.Name == 'CPU Core #' + str(i + 1)), self.cpu.coresLoad[i]))
 
         # GPU
         if(len(self.gpu.load) == NB_VALUES_ARRAY):
@@ -70,12 +69,9 @@ class Cpu:
     def __init__(self):
         self.load = []
         self.temperatures = []
-        self.loadCore1 = None
-        self.loadCore2 = None
-        self.loadCore3 = None
-        self.loadCore4 = None
-        self.loadCore5 = None
-        self.loadCore6 = None
+        self.coresLoad = []
+        for i in range(1, (NB_CPU_CORES + 1)):
+            self.coresLoad.append(None)
 
 class Gpu:
     def __init__(self):
