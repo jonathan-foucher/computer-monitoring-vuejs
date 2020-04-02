@@ -83,7 +83,7 @@
     <!-- RAM / Disk -->
     <v-row  justify="center" align="center">
       <v-col cols="0.5" />
-      <v-col cols="3">
+      <v-col cols="4">
         <DonutChart
           dataStateName="ramLoad"
           name="ram-load"
@@ -108,7 +108,7 @@
               {{ ssd1Name }} ({{ Math.round(ssd1UsedSpace) }} %)
             </font>
           </v-progress-linear>
-
+        <br>
         <v-progress-linear
           background-opacity="0.3"
           height="35px"
@@ -119,7 +119,7 @@
               {{ ssd2Name }} ({{ Math.round(ssd2UsedSpace) }} %)
             </font>
           </v-progress-linear>
-
+        <br>
         <v-progress-linear
           background-opacity="0.3"
           height="35px"
