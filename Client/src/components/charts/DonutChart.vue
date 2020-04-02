@@ -55,7 +55,7 @@ export default {
             backgroundColor: ['rgba(54, 162, 235, 0.3)', 'rgba(200, 162, 235, 0.02)'],
             borderColor: ['rgb(54, 162, 235)', 'rgba(200, 162, 235, 0.5)'],
             fill: true,
-            data: this.dataset,
+            data: [this.dataset, 100 - this.dataset],
             lineTension: 0,
           }
         ]
