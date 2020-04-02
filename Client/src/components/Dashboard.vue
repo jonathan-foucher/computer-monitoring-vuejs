@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <!-- CPU -->
-    <v-row>
+    <v-row  justify="center" align="center">
       <v-col>
         <LineChart 
           dataStateName="cpuLoad"
@@ -9,7 +9,7 @@
           title="CPU load %"
           unit="%" />
       </v-col>
-      <v-col>
+      <v-col cols='4.5'>
         <RadarChart
           dataStateName="cpuCoresLoad"
           name="cores-load"
@@ -24,21 +24,23 @@
       </v-col>
     </v-row>
     <!-- GPU -->
-    <v-row>
-      <v-col>
+    <v-row justify="center" align="center">
+      <v-col cols="4">
         <LineChart
           dataStateName="gpuLoad"
           name="gpu-usage"
           title="GPU load %"
           unit="%" />
       </v-col>
-      <v-col>
+      <v-col cols="0.5" />
+      <v-col cols="3">
         <DonutChart
           dataStateName="gpuRamLoad"
           name="gpu-ram-load"
           title="GPU RAM load %" />
       </v-col>
-      <v-col>
+       <v-col cols="0.5" />
+      <v-col cols="4">
         <LineChart
           dataStateName="gpuTemperatures"
           name="gpu-temperatures"
@@ -47,17 +49,18 @@
       </v-col>
     </v-row>
     <!-- RAM / Disk -->
-    <v-row>
-      <v-col>
+    <v-row  justify="center" align="center">
+      <v-col cols="3">
         <DonutChart
           dataStateName="ramLoad"
           name="ram-load"
           title="RAM load %" />
       </v-col>
-      <v-col>
+      <v-col cols="2">
         <v-progress-linear
           background-opacity="0.3"
           height="35px"
+          width="10px"
           :rounded="true"
           :value="ssd1UsedSpace"
           color="light-blue">{{ ssd1Name }} ({{ Math.round(ssd1UsedSpace) }} %)</v-progress-linear>
@@ -136,4 +139,7 @@ export default {
 </script>
 
 <style scoped>
+  v-progress-linear {
+    padding: 60px!important;
+  }
 </style>
