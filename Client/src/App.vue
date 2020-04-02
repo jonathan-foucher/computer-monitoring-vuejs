@@ -1,6 +1,10 @@
 <template>
   <div id="app" class="pa-0">
-    <Dashboard />
+    <v-app>
+      <v-content>
+        <Dashboard />
+      </v-content>
+    </v-app>
   </div>
 </template>
 
@@ -21,7 +25,7 @@ export default {
 </script>
 
 <style>
-  body {
+  #app {
     background: #1d2022;
   }
 

@@ -4,6 +4,7 @@
 
 <script>
 import { Chart } from 'chart.js';
+import { mapState } from 'vuex';
 
 export default {
    props: {
@@ -12,14 +13,37 @@ export default {
       required: true,
     },
     title: {
+      type: String,
       required: false,
       default: ''
+    },
+    dataStateName: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+    ...mapState({
+      dataset (state) {
+        return state[this.dataStateName]
+      },
+    }),
+  },
+  data() {
+    return {
+      chart: undefined,
     }
   },
- data() {
-    return {
-      dataset: [70, 30],
-    }
+  watch: {
+    'dataset': {
+      immediate: false,
+      deep: true,
+      handler(newValue) {
+        this.chart.data.datasets[0].data.length = 0;
+        this.chart.data.datasets[0].data.push(newValue, 100 - newValue);
+        this.chart.update();
+      },
+    },
   },
   mounted() {
     var ctx = document.getElementById(this.name);
@@ -28,8 +52,8 @@ export default {
       data: {
         datasets: [
           {
-            backgroundColor: ['rgba(54, 162, 235, 0.3)', 'rgba(200, 162, 235, 0.3)'],
-            borderColor: ['rgb(54, 162, 235)', 'rgb(200, 162, 235)'],
+            backgroundColor: ['rgba(54, 162, 235, 0.3)', 'rgba(200, 162, 235, 0.02)'],
+            borderColor: ['rgb(54, 162, 235)', 'rgba(200, 162, 235, 0.5)'],
             fill: true,
             data: this.dataset,
             lineTension: 0,
@@ -43,6 +67,9 @@ export default {
           display: true,
           text: this.title
         },
+        animation: {
+          duration: 0,
+        },
         responsive: true,
         layout: {
           padding: {
@@ -51,6 +78,9 @@ export default {
             top: 0,
             bottom: 20,
           },
+        },
+        tooltips: {
+          enabled: false,
         },
         legend: {
           display: false,

@@ -13,10 +13,15 @@ export default {
       required: true,
     },
     title: {
+      type: String,
       required: false,
       default: ''
     },
-    stateName: {
+    dataStateName: {
+      type: String,
+      required: true,
+    },
+    unit: {
       type: String,
       required: true,
     },
@@ -24,7 +29,7 @@ export default {
   computed: {
     ...mapState({
       dataset (state) {
-        return state[this.stateName]
+        return state[this.dataStateName]
       },
       time: 'time',
     }),
@@ -40,6 +45,9 @@ export default {
       deep: true,
       handler(newValue) {
         this.chart.data.datasets[0].data = newValue;
+        this.chart.options.scales.yAxes[0].ticks.min = this.unit === '%' ? 0 : 10*Math.floor((Math.min(...this.dataset) - 10) / 10);
+        this.chart.options.scales.yAxes[0].ticks.max = this.unit === '%' ? 100 : 10*Math.ceil((Math.max(...this.dataset) + 10) / 10);
+
         this.chart.update();
       },
     },
@@ -96,8 +104,8 @@ export default {
               }
 
               label += Math.floor(tooltipItem.yLabel);
-              return label + '°C';
-            }
+              return label + this.unit;
+            }.bind(this)
           }
         },
         legend: {
@@ -115,18 +123,26 @@ export default {
               time: {
                 unit: 'hour',
                 displayFormats: {
-                  hour: 'M/DD @ hA'
+                  hour: 'HH:mm:ss'
                 },
-                tooltipFormat: 'MMM. DD @ hA'
+                tooltipFormat: 'HH:mm:ss'
               },
             }
           ],
           yAxes: [
             {
+              gridLines: {
+                display: true,
+                drawOnChartArea: false,
+                color: '#FFFFFF',
+              },
               ticks: {
+                min: this.unit === '%' ? 0 : 10 * Math.floor((Math.min(...this.dataset) - 10) / 10),
+                max: this.unit === '%' ? 100 : 10 * Math.ceil((Math.max(...this.dataset) + 10) / 10),
+                stepSize: 10,
                 callback: function(value) {
-                  return value + '°C';
-                }
+                  return value + this.unit + ' ';
+                }.bind(this)
               }
             }
           ]
