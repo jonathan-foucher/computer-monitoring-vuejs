@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="name"></canvas>
+  <canvas :id="name" />
 </template>
 
 <script>
@@ -80,6 +80,7 @@ export default {
       options: {
         title: {
           display: true,
+          fontSize: 20,
           text: this.title
         },
         animation: {
@@ -116,15 +117,17 @@ export default {
             {
               gridLines: {
                 display: true,
+                drawOnChartArea: false,
+                drawTicks: false,
                 color: '#FFFFFF',
+              },
+              ticks: {
+                display: false,
               },
               borderColor: 'white',
               type: 'time',
               time: {
-                unit: 'hour',
-                displayFormats: {
-                  hour: 'HH:mm:ss'
-                },
+                unit: 'minutes',
                 tooltipFormat: 'HH:mm:ss'
               },
             }

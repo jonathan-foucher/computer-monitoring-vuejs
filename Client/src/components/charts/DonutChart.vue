@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="name"></canvas>
+  <canvas :id="name" />
 </template>
 
 <script>
@@ -65,12 +65,13 @@ export default {
         rotation: Math.PI,
         title: {
           display: true,
-          text: this.title
+          fontSize: 20,
+          text: this.title,
         },
+        responsive: true,
         animation: {
           duration: 0,
         },
-        responsive: true,
         layout: {
           padding: {
             left: 20,

@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="name"></canvas>
+  <canvas :id="name" />
 </template>
 
 <script>
@@ -43,7 +43,7 @@ export default {
 
       this.chart.data.labels.length = 0;
       for(let i = 1; i <= newValue.length; i++) {
-        this.chart.data.labels.push('Core #' + i + ' / ' + Math.round(newValue[i - 1]) + '%');
+        this.chart.data.labels.push('Core #' + i + ' / ' + (Math.round(newValue[i - 1]).toString().length === 1 ? ' ' : '') + Math.round(newValue[i - 1]) + '%');
       }
 
       this.chart.update();
@@ -70,8 +70,11 @@ export default {
       options: {
         title: {
           display: true,
-          text: this.title
+          fontSize: 20,
+          text: this.title,
         },
+        responsive: true,
+        maintainAspectRatio: true,
         layout: {
           padding: {
             left: 0,
@@ -86,7 +89,6 @@ export default {
         legend: {
           display: false,
 				},
-				maintainAspectRatio: true,
 				scale: {
 					gridLines: {
 						color: 'rgb(200, 162, 235)'
