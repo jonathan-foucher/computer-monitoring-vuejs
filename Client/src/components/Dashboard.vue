@@ -16,7 +16,7 @@
             { color: 'red', value: 90},
           ]" />
       </v-col>
-      <v-col cols='4.5'>
+      <v-col cols="4.5">
         <RadarChart
           dataStateName="cpuCoresLoad"
           name="cores-load"
@@ -132,8 +132,14 @@
           </v-progress-linear>
       </v-col>
       <v-col cols="1" />
-      <v-col cols='4'>
-        {{ datenow | formatTime }}
+      <v-col cols="4" justify="center" align="center">
+        <span id="date">
+          {{ datenow | formatDate }}
+        </span>
+        <br>
+        <span id="time">
+          {{ datenow | formatTime }}
+        </span>
       </v-col>
     </v-row>
   </v-container>
@@ -192,9 +198,17 @@ export default {
     datenow() {},
   },
   filters: {
+    formatDate(date) {
+      let temp = new Date(date);
+      return (temp.getDay() < 10 ? '0' : '') + temp.getDay() + '/'
+        + (temp.getMonth() < 10 ? '0' : '') + temp.getMonth() + '/'
+        + temp.getFullYear();
+    },
     formatTime(time) {
       let temp = new Date(time);
-      return temp.getHours() + ":" + temp.getMinutes() + ":" + temp.getSeconds();
+      return (temp.getHours() < 10 ? '0' : '') + temp.getHours() + ':'
+        + (temp.getMinutes() < 10 ? '0' : '') + temp.getMinutes() + ':'
+        + (temp.getSeconds() < 10 ? '0' : '') + temp.getSeconds();
     },
     calculateTemperaturesRange(temperatures) {
       return [
@@ -207,4 +221,13 @@ export default {
 </script>
 
 <style scoped>
+  #date {
+    color: white;
+    font-size: 2.5em;
+  }
+
+  #time {
+    color: white;
+    font-size: 5em;
+  }
 </style>
