@@ -5,6 +5,7 @@
 <script>
 import { Chart } from 'chart.js';
 import { mapState } from 'vuex';
+import chartColorsMixin from '../../mixins/chartColorsMixin';
 
 export default {
    props: {
@@ -15,7 +16,7 @@ export default {
     title: {
       type: String,
       required: false,
-      default: ''
+      default: '',
     },
     dataStateName: {
       type: String,
@@ -34,6 +35,7 @@ export default {
       chart: undefined,
     }
   },
+  mixins: [chartColorsMixin],
   watch: {
   'dataset': {
     immediate: false,
@@ -43,7 +45,7 @@ export default {
 
       this.chart.data.labels.length = 0;
       for(let i = 1; i <= newValue.length; i++) {
-        this.chart.data.labels.push('Core #' + i + ' / ' + (Math.round(newValue[i - 1]).toString().length === 1 ? ' ' : '') + Math.round(newValue[i - 1]) + '%');
+        this.chart.data.labels.push('Core #' + i + ' - ' + (Math.round(newValue[i - 1]).toString().length === 1 ? '  ' : '') + Math.round(newValue[i - 1]) + '%');
       }
 
       this.chart.update();
@@ -58,9 +60,9 @@ export default {
 				labels: [],
         datasets: [
           {
-						backgroundColor: 'rgba(54, 162, 235, 0.3)',
-            borderColor: 'rgb(54, 162, 235)',
-						pointBackgroundColor: 'rgba(179,181,198,1)',
+						backgroundColor: this.getColorWithAlpha(this.blue, 0.3),
+            borderColor: this.blue,
+						pointBackgroundColor: this.grey,
 						pointBorderColor: '#fff',
             fill: true,
             data: this.dataset,
@@ -70,6 +72,7 @@ export default {
       options: {
         title: {
           display: true,
+          fontColor: this.blue,
           fontSize: 20,
           text: this.title,
         },
@@ -91,13 +94,17 @@ export default {
 				},
 				scale: {
 					gridLines: {
-						color: 'rgb(200, 162, 235)'
+						color: this.purple,
 					},
 					ticks: {
 						display: false,
 						beginAtZero: true,
 						max: 100
-					}
+          },
+          pointLabels: {
+            fontColor: this.blue,
+            fontSize: 14,
+          },
 				}
       }
     });

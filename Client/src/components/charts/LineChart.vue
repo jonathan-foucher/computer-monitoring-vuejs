@@ -5,6 +5,8 @@
 <script>
 import { Chart } from 'chart.js';
 import { mapState } from 'vuex';
+import chartColorsMixin from '../../mixins/chartColorsMixin';
+import utilsMixin from '../../mixins/utilsMixin';
 
 export default {
   props: {
@@ -15,7 +17,7 @@ export default {
     title: {
       type: String,
       required: false,
-      default: ''
+      default: '',
     },
     dataStateName: {
       type: String,
@@ -24,6 +26,19 @@ export default {
     unit: {
       type: String,
       required: true,
+    },
+    colorsLimits: {
+      type: Array,
+      required: true,
+      validator: function(value) {
+        value.sort().reverse();
+        return true;
+      },
+    },
+    useAvgForColor: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   computed: {
@@ -39,14 +54,31 @@ export default {
       chart: undefined,
     }
   },
+  methods: {
+    getChartColor(value) {
+      let limit = this.colorsLimits.find(limit => limit.value <= value);
+      return limit ? limit.color : 'grey';
+    },
+  },
   watch: {
     'dataset': {
       immediate: false,
       deep: true,
       handler(newValue) {
+        // data
         this.chart.data.datasets[0].data = newValue;
-        this.chart.options.scales.yAxes[0].ticks.min = this.unit === '%' ? 0 : 10*Math.floor((Math.min(...this.dataset) - 10) / 10);
-        this.chart.options.scales.yAxes[0].ticks.max = this.unit === '%' ? 100 : 10*Math.ceil((Math.max(...this.dataset) + 10) / 10);
+
+        const min = Math.min(...newValue);
+        const max = Math.max(...newValue);
+        const avg = this.arrayAverage(newValue);
+
+        // colors
+        this.chart.data.datasets[0].backgroundColor = this.getColorWithAlpha(this[this.getChartColor(this.useAvgForColor ? avg : max)], 0.3);
+        this.chart.data.datasets[0].borderColor = this[this.getChartColor(this.useAvgForColor ? avg : max)];
+
+        // y range
+        this.chart.options.scales.yAxes[0].ticks.min = this.unit === '%' ? 0 : 10 * Math.floor((min - 10) / 10);
+        this.chart.options.scales.yAxes[0].ticks.max = this.unit === '%' ? 100 : 10 * Math.ceil((max + 10) / 10);
 
         this.chart.update();
       },
@@ -60,6 +92,10 @@ export default {
       },
     },
   },
+  mixins: [
+    chartColorsMixin,
+    utilsMixin,
+  ],
   mounted() {
     var ctx = document.getElementById(this.name);
     
@@ -69,8 +105,8 @@ export default {
         labels: this.time,
         datasets: [
           {
-            backgroundColor: 'rgba(54, 162, 235, 0.3)',
-            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: this.getColorWithAlpha(this[this.getChartColor(Math.max(...this.dataset))], 0.3),
+            borderColor: this[this.getChartColor(Math.max(...this.dataset))],
             fill: true,
             data: this.dataset,
             lineTension: 0,
@@ -81,7 +117,8 @@ export default {
         title: {
           display: true,
           fontSize: 20,
-          text: this.title
+          fontColor: this.blue,
+          text: this.title,
         },
         animation: {
           duration: 0,
@@ -119,12 +156,12 @@ export default {
                 display: true,
                 drawOnChartArea: false,
                 drawTicks: false,
-                color: '#FFFFFF',
+                color: this.grey,
               },
               ticks: {
                 display: false,
               },
-              borderColor: 'white',
+              borderColor: this.grey,
               type: 'time',
               time: {
                 unit: 'minutes',
@@ -137,7 +174,7 @@ export default {
               gridLines: {
                 display: true,
                 drawOnChartArea: false,
-                color: '#FFFFFF',
+                color: this.grey,
               },
               ticks: {
                 min: this.unit === '%' ? 0 : 10 * Math.floor((Math.min(...this.dataset) - 10) / 10),

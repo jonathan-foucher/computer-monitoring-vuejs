@@ -5,6 +5,7 @@
 <script>
 import { Chart } from 'chart.js';
 import { mapState } from 'vuex';
+import chartColorsMixin from '../../mixins/chartColorsMixin';
 
 export default {
    props: {
@@ -15,10 +16,14 @@ export default {
     title: {
       type: String,
       required: false,
-      default: ''
+      default: '',
     },
     dataStateName: {
       type: String,
+      required: true,
+    },
+    colorsLimits: {
+      type: Array,
       required: true,
     },
   },
@@ -34,6 +39,13 @@ export default {
       chart: undefined,
     }
   },
+  methods: {
+    getChartColor(value) {
+      let limit = this.colorsLimits.find(limit => limit.value <= value);
+      return limit ? limit.color : 'grey';
+    },
+  },
+  mixins: [chartColorsMixin],
   watch: {
     'dataset': {
       immediate: false,
@@ -52,8 +64,14 @@ export default {
       data: {
         datasets: [
           {
-            backgroundColor: ['rgba(54, 162, 235, 0.3)', 'rgba(200, 162, 235, 0.02)'],
-            borderColor: ['rgb(54, 162, 235)', 'rgba(200, 162, 235, 0.5)'],
+            backgroundColor: [
+              this.getColorWithAlpha(this[this.getChartColor(this.dataset)], 0.3),
+              this.getColorWithAlpha(this.white, 0.08),
+            ],
+            borderColor: [
+              this[this.getChartColor(this.dataset)],
+              this.getColorWithAlpha(this.grey, 0.5),
+            ],
             fill: true,
             data: [this.dataset, 100 - this.dataset],
             lineTension: 0,
@@ -66,6 +84,7 @@ export default {
         title: {
           display: true,
           fontSize: 20,
+          fontColor: this.blue,
           text: this.title,
         },
         responsive: true,
