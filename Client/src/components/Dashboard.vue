@@ -92,6 +92,7 @@
           SSD/HDD used space %
         </span>
         <br>
+
         <v-progress-linear
           background-opacity="0.3"
           :background-color="grey"
@@ -104,6 +105,7 @@
             </span>
           </v-progress-linear>
         <br>
+
         <v-progress-linear
           background-opacity="0.3"
           :background-color="grey"
@@ -116,6 +118,7 @@
             </span>
           </v-progress-linear>
         <br>
+        
         <v-progress-linear
           background-opacity="0.3"
           :background-color="grey"
