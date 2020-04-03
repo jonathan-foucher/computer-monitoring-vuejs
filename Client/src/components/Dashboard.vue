@@ -215,15 +215,11 @@ export default {
   filters: {
     formatDate(date) {
       let temp = new Date(date);
-      return (temp.getDay() < 10 ? '0' : '') + temp.getDay() + '/'
-        + (temp.getMonth() < 10 ? '0' : '') + temp.getMonth() + '/'
-        + temp.getFullYear();
+      return temp.toLocaleString('en-GB', { year: 'numeric', month: 'long', day: '2-digit' });
     },
     formatTime(time) {
       let temp = new Date(time);
-      return (temp.getHours() < 10 ? '0' : '') + temp.getHours() + ':'
-        + (temp.getMinutes() < 10 ? '0' : '') + temp.getMinutes() + ':'
-        + (temp.getSeconds() < 10 ? '0' : '') + temp.getSeconds();
+      return temp.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
     },
     calculateTemperaturesRange(temperatures) {
       return [
