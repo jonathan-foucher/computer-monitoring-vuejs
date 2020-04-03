@@ -14,9 +14,8 @@ export default {
       required: true,
     },
     title: {
-      type: String,
-      required: false,
-      default: '',
+      type: Array,
+      required: true,
     },
     dataStateName: {
       type: String,
@@ -75,6 +74,7 @@ export default {
             fill: true,
             data: [this.dataset, 100 - this.dataset],
             lineTension: 0,
+            devicePixelRatio: 5,
           }
         ]
       },
