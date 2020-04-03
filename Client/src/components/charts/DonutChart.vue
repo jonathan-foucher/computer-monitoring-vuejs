@@ -24,6 +24,10 @@ export default {
     colorsLimits: {
       type: Array,
       required: true,
+      validator: function(value) {
+        value.sort().reverse();
+        return true;
+      },
     },
   },
   computed: {
@@ -50,8 +54,11 @@ export default {
       immediate: false,
       deep: true,
       handler(newValue) {
-        this.chart.data.datasets[0].data.length = 0;
-        this.chart.data.datasets[0].data.push(newValue, 100 - newValue);
+        this.chart.data.datasets[0].data = [newValue, 100 - newValue];
+
+        this.chart.data.datasets[0].backgroundColor[0] = this.getColorWithAlpha(this[this.getChartColor(newValue)], 0.3);
+        this.chart.data.datasets[0].borderColor[0] = this[this.getChartColor(newValue)];
+
         this.chart.update();
       },
     },
