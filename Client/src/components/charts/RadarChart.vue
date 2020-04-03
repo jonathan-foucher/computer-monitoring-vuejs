@@ -102,7 +102,7 @@ export default {
 						max: 100
           },
           pointLabels: {
-            fontColor: this.green,
+            fontColor: this.white,
             fontSize: 14,
           },
 				}

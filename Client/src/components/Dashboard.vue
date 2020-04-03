@@ -16,12 +16,14 @@
             { color: 'red', value: 90},
           ]" />
       </v-col>
+
       <v-col cols="4.5">
         <RadarChart
           dataStateName="cpuCoresLoad"
           name="cores-load"
           title="CPU cores load %" />
       </v-col>
+
       <v-col>
         <LineChart
           dataStateName="cpuTemperatures"
@@ -36,6 +38,7 @@
           ]" />
       </v-col>
     </v-row>
+
     <!-- GPU -->
     <v-row justify="center" align="center">
       <v-col cols="4">
@@ -52,12 +55,12 @@
             { color: 'red', value: 90},
           ]" />
       </v-col>
-      <v-col cols="0.5" />
-      <v-col cols="3">
+
+      <v-col cols="4">
         <DonutChart
           dataStateName="gpuRamLoad"
           name="gpu-ram-load"
-          title="GPU RAM load %"
+          :title="['GPU RAM load %', '', '']"
           :colorsLimits="[
             { color: 'green', value: 0},
             { color: 'yellow', value: 60},
@@ -65,7 +68,7 @@
             { color: 'red', value: 90},
           ]" />
       </v-col>
-       <v-col cols="0.5" />
+
       <v-col cols="4">
         <LineChart
           dataStateName="gpuTemperatures"
@@ -80,59 +83,55 @@
           ]" />
       </v-col>
     </v-row>
+
     <!-- RAM / Disk -->
     <v-row  justify="center" align="center">
       <v-col cols="0.5" />
-      <v-col cols="4">
-        <DonutChart
-          dataStateName="ramLoad"
-          name="ram-load"
-          title="RAM load %"
-          :colorsLimits="[
-            { color: 'green', value: 0},
-            { color: 'yellow', value: 60},
-            { color: 'orange', value: 75},
-            { color: 'red', value: 90},
-          ]" />
-      </v-col>
-      <v-col cols="0.5" />
-      <v-col cols="2">
+      <v-col cols="3">
+        <span class="graph-title">
+          SSD/HDD used space %
+        </span>
+        <br>
         <v-progress-linear
           background-opacity="0.3"
+          :background-color="grey"
           height="35px"
-          width="10px"
           :rounded="true"
           :value="ssd1UsedSpace"
           :color="getDiskColor(ssd1UsedSpace)">
-            <font :color="`blue`">
+            <span class="text-progress-bar">
               {{ ssd1Name }} ({{ Math.round(ssd1UsedSpace) }} %)
-            </font>
+            </span>
           </v-progress-linear>
         <br>
         <v-progress-linear
           background-opacity="0.3"
+          :background-color="grey"
           height="35px"
           :rounded="true"
           :value="ssd2UsedSpace"
           :color="getDiskColor(ssd2UsedSpace)">
-            <font :color="`blue`">
+            <span class="text-progress-bar">
               {{ ssd2Name }} ({{ Math.round(ssd2UsedSpace) }} %)
-            </font>
+            </span>
           </v-progress-linear>
         <br>
         <v-progress-linear
           background-opacity="0.3"
+          :background-color="grey"
           height="35px"
           :rounded="true"
           :value="hdd1UsedSpace"
           :color="getDiskColor(hdd1UsedSpace)">
-            <font :color="`blue`">
+            <span class="text-progress-bar">
               {{ hddd1Name }} ({{ Math.round(hdd1UsedSpace) }} %)
-            </font>
+            </span>
           </v-progress-linear>
       </v-col>
-      <v-col cols="1" />
+      <v-col cols="0.5" />
+
       <v-col cols="4" justify="center" align="center">
+        <br>
         <span id="date">
           {{ datenow | formatDate }}
         </span>
@@ -140,6 +139,19 @@
         <span id="time">
           {{ datenow | formatTime }}
         </span>
+      </v-col>
+      
+      <v-col cols="4">
+        <DonutChart
+          dataStateName="ramLoad"
+          name="ram-load"
+          :title="['RAM load %', '', '']"
+          :colorsLimits="[
+            { color: 'green', value: 0},
+            { color: 'yellow', value: 60},
+            { color: 'orange', value: 75},
+            { color: 'red', value: 90},
+          ]" />
       </v-col>
     </v-row>
   </v-container>
@@ -229,5 +241,19 @@ export default {
   #time {
     color: white;
     font-size: 5em;
+  }
+
+  .text-progress-bar {
+    font-weight: 1000;
+  }
+
+  .graph-title {
+    color: rgb(20, 150, 230);
+    font-weight: bold;
+    padding: 10px;
+    font-size: 20px;
+    font-family: 'Arial';
+    display: block;
+    text-align: center;
   }
 </style>
