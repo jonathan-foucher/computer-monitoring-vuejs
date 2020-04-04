@@ -104,7 +104,6 @@ export default {
 
         this.chart.options.elements.center.text = Math.round(newValue) + '%';
         this.chart.options.elements.center.color = this[this.getChartColor(newValue)];
-        console.log(newValue);
 
         this.chart.update();
       },
