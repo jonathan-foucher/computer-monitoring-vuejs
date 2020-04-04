@@ -88,48 +88,7 @@
     <v-row  justify="center" align="center">
       <v-col cols="0.5" />
       <v-col cols="3">
-        <span class="graph-title">
-          SSD/HDD used space %
-        </span>
-        <br>
-
-        <v-progress-linear
-          background-opacity="0.3"
-          :background-color="grey"
-          height="35px"
-          :rounded="true"
-          :value="ssd1UsedSpace"
-          :color="getDiskColor(ssd1UsedSpace)">
-            <span class="text-progress-bar">
-              {{ ssd1Name }} ({{ Math.round(ssd1UsedSpace) }} %)
-            </span>
-          </v-progress-linear>
-        <br>
-
-        <v-progress-linear
-          background-opacity="0.3"
-          :background-color="grey"
-          height="35px"
-          :rounded="true"
-          :value="ssd2UsedSpace"
-          :color="getDiskColor(ssd2UsedSpace)">
-            <span class="text-progress-bar">
-              {{ ssd2Name }} ({{ Math.round(ssd2UsedSpace) }} %)
-            </span>
-          </v-progress-linear>
-        <br>
-        
-        <v-progress-linear
-          background-opacity="0.3"
-          :background-color="grey"
-          height="35px"
-          :rounded="true"
-          :value="hdd1UsedSpace"
-          :color="getDiskColor(hdd1UsedSpace)">
-            <span class="text-progress-bar">
-              {{ hddd1Name }} ({{ Math.round(hdd1UsedSpace) }} %)
-            </span>
-          </v-progress-linear>
+        <DisksComponent />
       </v-col>
       <v-col cols="0.5" />
 
@@ -164,8 +123,7 @@
 import LineChart from './charts/LineChart';
 import DonutChart from './charts/DonutChart';
 import RadarChart from './charts/RadarChart';
-import { mapState } from 'vuex';
-import chartColorsMixin from '../mixins/chartColorsMixin';
+import DisksComponent from './DisksComponent';
 
 export default {
   name: 'Dashboard',
@@ -173,8 +131,8 @@ export default {
     LineChart,
     DonutChart,
     RadarChart,
+    DisksComponent,
   },
-  mixins: [chartColorsMixin],
   mounted() {
     setInterval(() => { this.datenow = Date.now() }, 1000);
   },
@@ -182,32 +140,6 @@ export default {
     return {
       datenow: Date.now(),
     }
-  },
-  methods: {
-    getDiskColor(value) {
-      if(value >= 90)
-        return this.getColorWithAlpha(this.red, 0.9);
-
-      else if(value >= 75)
-        return this.getColorWithAlpha(this.orange, 0.9);
-
-      else if(value >= 60)
-        return this.getColorWithAlpha(this.yellow, 0.9);
-
-      return this.getColorWithAlpha(this.green, 0.9);
-    }
-  },
-  computed: {
-    ...mapState([
-      'cpuTemperatures',
-      'gpuTemperatures',
-      'ssd1Name',
-      'ssd1UsedSpace',
-      'ssd2Name',
-      'ssd2UsedSpace',
-      'hddd1Name',
-      'hdd1UsedSpace',
-    ]),
   },
   watch : {
     datenow() {},
@@ -220,12 +152,6 @@ export default {
     formatTime(time) {
       let temp = new Date(time);
       return temp.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
-    },
-    calculateTemperaturesRange(temperatures) {
-      return [
-        Math.floor(Math.min(temperatures) + 5),
-        Math.ceil(Math.max(temperatures) + 5)
-      ];
     },
   }
 }
@@ -240,19 +166,5 @@ export default {
   #time {
     color: white;
     font-size: 5em;
-  }
-
-  .text-progress-bar {
-    font-weight: 1000;
-  }
-
-  .graph-title {
-    color: rgb(20, 150, 230);
-    font-weight: bold;
-    padding: 10px;
-    font-size: 20px;
-    font-family: 'Arial';
-    display: block;
-    text-align: center;
   }
 </style>
