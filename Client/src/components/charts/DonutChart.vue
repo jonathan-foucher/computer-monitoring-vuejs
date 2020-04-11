@@ -5,7 +5,7 @@
 <script>
 import { Chart } from 'chart.js';
 import { mapState } from 'vuex';
-import chartColorsMixin from '../../mixins/chartColorsMixin';
+import chartColorsMixin from '@/mixins/chartColorsMixin';
 
 export default {
    props: {

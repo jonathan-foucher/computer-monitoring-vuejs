@@ -47,7 +47,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import chartColorsMixin from '../mixins/chartColorsMixin';
+import chartColorsMixin from '@/mixins/chartColorsMixin';
 
 export default {
   mixins: [chartColorsMixin],
