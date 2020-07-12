@@ -17,7 +17,7 @@ export default {
     Dashboard,
   },
   created() {
-    this.sockets.subscribe("data", (data) => {
+    this.sockets.listener.subscribe("data", (data) => {
       this.$store.dispatch("updateData", JSON.parse(data));
     });
   },
