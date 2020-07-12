@@ -12,24 +12,24 @@
 import Dashboard from "./components/Dashboard";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Dashboard,
   },
   created() {
-    this.sockets.subscribe('data', data => {
-      this.$store.dispatch('updateData', JSON.parse(data));
+    this.sockets.subscribe("data", (data) => {
+      this.$store.dispatch("updateData", JSON.parse(data));
     });
-  }
-}
+  },
+};
 </script>
 
 <style>
-  #app {
-    background: #0f1011;
-  }
+#app {
+  background: #0f1011;
+}
 
-  body::-webkit-scrollbar {
-    display: none;
-  }
+body::-webkit-scrollbar {
+  display: none;
+}
 </style>
