@@ -1,5 +1,6 @@
 import socketio
 import eventlet
+import datetime
 from data_format import DataToSend
 
 # contains the data to send (temperatures, load...)
@@ -12,9 +13,12 @@ app = socketio.WSGIApp(sio)
 # update and send the data every second
 def listen():
     while True:
+        startTime = datetime.datetime.now()
         myData.update()
         sio.emit('data', myData.toJSON())
-        eventlet.sleep(1)
+        timeToSleep = 1 - (datetime.datetime.now() - startTime).total_seconds()
+        if timeToSleep > 0 :
+            eventlet.sleep(timeToSleep)
 
 eventlet.spawn(listen)
 
