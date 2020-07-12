@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import { Chart } from 'chart.js';
-import { mapState } from 'vuex';
-import chartColorsMixin from '@/mixins/chartColorsMixin';
+import { Chart } from "chart.js";
+import { mapState } from "vuex";
+import chartColorsMixin from "@/mixins/chartColorsMixin";
 
 export default {
-   props: {
+  props: {
     name: {
       type: String,
       required: true,
@@ -16,7 +16,7 @@ export default {
     title: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     dataStateName: {
       type: String,
@@ -25,49 +25,58 @@ export default {
   },
   computed: {
     ...mapState({
-      dataset (state) {
-        return state[this.dataStateName]
+      dataset(state) {
+        return state[this.dataStateName];
       },
     }),
   },
   data() {
     return {
       chart: undefined,
-    }
+    };
   },
   mixins: [chartColorsMixin],
   watch: {
-  'dataset': {
-    immediate: false,
-    deep: true,
-    handler(newValue) {
-      this.chart.data.datasets[0].data = newValue;
+    dataset: {
+      immediate: false,
+      deep: true,
+      handler(newValue) {
+        this.chart.data.datasets[0].data = newValue;
 
-      this.chart.data.labels.length = 0;
-      for(let i = 1; i <= newValue.length; i++) {
-        this.chart.data.labels.push('Core #' + i + ' - ' + (Math.round(newValue[i - 1]).toString().length === 1 ? '  ' : '') + Math.round(newValue[i - 1]) + '%');
-      }
+        this.chart.data.labels.length = 0;
+        for (let i = 1; i <= newValue.length; i++) {
+          this.chart.data.labels.push(
+            "Core #" +
+              i +
+              " - " +
+              (Math.round(newValue[i - 1]).toString().length === 1
+                ? "  "
+                : "") +
+              Math.round(newValue[i - 1]) +
+              "%"
+          );
+        }
 
-      this.chart.update();
+        this.chart.update();
+      },
     },
-  },
   },
   mounted() {
     var ctx = document.getElementById(this.name);
     this.chart = new Chart(ctx, {
-      type: 'radar',
+      type: "radar",
       data: {
-				labels: [],
+        labels: [],
         datasets: [
           {
-						backgroundColor: this.getColorWithAlpha(this.blue, 0.3),
+            backgroundColor: this.getColorWithAlpha(this.blue, 0.3),
             borderColor: this.blue,
-						pointBackgroundColor: this.grey,
-						pointBorderColor: '#fff',
+            pointBackgroundColor: this.grey,
+            pointBorderColor: "#fff",
             fill: true,
             data: this.dataset,
-          }
-        ]
+          },
+        ],
       },
       options: {
         title: {
@@ -91,26 +100,25 @@ export default {
         },
         legend: {
           display: false,
-				},
-				scale: {
-					gridLines: {
-						color: this.purple,
-					},
-					ticks: {
-						display: false,
-						beginAtZero: true,
-						max: 100
+        },
+        scale: {
+          gridLines: {
+            color: this.purple,
+          },
+          ticks: {
+            display: false,
+            beginAtZero: true,
+            max: 100,
           },
           pointLabels: {
             fontColor: this.white,
             fontSize: 14,
           },
-				}
-      }
+        },
+      },
     });
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import { Chart } from 'chart.js';
-import { mapState } from 'vuex';
-import chartColorsMixin from '@/mixins/chartColorsMixin';
-import utilsMixin from '@/mixins/utilsMixin';
+import { Chart } from "chart.js";
+import { mapState } from "vuex";
+import chartColorsMixin from "@/mixins/chartColorsMixin";
+import utilsMixin from "@/mixins/utilsMixin";
 
 export default {
   props: {
@@ -17,7 +17,7 @@ export default {
     title: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     dataStateName: {
       type: String,
@@ -43,25 +43,25 @@ export default {
   },
   computed: {
     ...mapState({
-      dataset (state) {
-        return state[this.dataStateName]
+      dataset(state) {
+        return state[this.dataStateName];
       },
-      time: 'time',
+      time: "time",
     }),
   },
   data() {
     return {
       chart: undefined,
-    }
+    };
   },
   methods: {
     getChartColor(value) {
-      let limit = this.colorsLimits.find(limit => limit.value <= value);
-      return limit ? limit.color : 'grey';
+      let limit = this.colorsLimits.find((limit) => limit.value <= value);
+      return limit ? limit.color : "grey";
     },
   },
   watch: {
-    'dataset': {
+    dataset: {
       immediate: false,
       deep: true,
       handler(newValue) {
@@ -73,17 +73,24 @@ export default {
         const avg = this.arrayAverage(newValue);
 
         // colors
-        this.chart.data.datasets[0].backgroundColor = this.getColorWithAlpha(this[this.getChartColor(this.useAvgForColor ? avg : max)], 0.3);
-        this.chart.data.datasets[0].borderColor = this[this.getChartColor(this.useAvgForColor ? avg : max)];
+        this.chart.data.datasets[0].backgroundColor = this.getColorWithAlpha(
+          this[this.getChartColor(this.useAvgForColor ? avg : max)],
+          0.3
+        );
+        this.chart.data.datasets[0].borderColor = this[
+          this.getChartColor(this.useAvgForColor ? avg : max)
+        ];
 
         // y range
-        this.chart.options.scales.yAxes[0].ticks.min = this.unit === '%' ? 0 : 10 * Math.floor((min - 10) / 10);
-        this.chart.options.scales.yAxes[0].ticks.max = this.unit === '%' ? 100 : 10 * Math.ceil((max + 10) / 10);
+        this.chart.options.scales.yAxes[0].ticks.min =
+          this.unit === "%" ? 0 : 10 * Math.floor((min - 10) / 10);
+        this.chart.options.scales.yAxes[0].ticks.max =
+          this.unit === "%" ? 100 : 10 * Math.ceil((max + 10) / 10);
 
         this.chart.update();
       },
     },
-    'time': {
+    time: {
       immediate: false,
       deep: true,
       handler(newValue) {
@@ -92,26 +99,26 @@ export default {
       },
     },
   },
-  mixins: [
-    chartColorsMixin,
-    utilsMixin,
-  ],
+  mixins: [chartColorsMixin, utilsMixin],
   mounted() {
     var ctx = document.getElementById(this.name);
-    
+
     this.chart = new Chart(ctx, {
-      type: 'line',
+      type: "line",
       data: {
         labels: this.time,
         datasets: [
           {
-            backgroundColor: this.getColorWithAlpha(this[this.getChartColor(Math.max(...this.dataset))], 0.3),
+            backgroundColor: this.getColorWithAlpha(
+              this[this.getChartColor(Math.max(...this.dataset))],
+              0.3
+            ),
             borderColor: this[this.getChartColor(Math.max(...this.dataset))],
             fill: true,
             data: this.dataset,
             lineTension: 0,
-          }
-        ]
+          },
+        ],
       },
       options: {
         title: {
@@ -135,16 +142,16 @@ export default {
         tooltips: {
           callbacks: {
             label: function(tooltipItem, data) {
-              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+              var label = data.datasets[tooltipItem.datasetIndex].label || "";
 
               if (label) {
-                label += ': ';
+                label += ": ";
               }
 
               label += Math.floor(tooltipItem.yLabel);
               return label + this.unit;
-            }.bind(this)
-          }
+            }.bind(this),
+          },
         },
         legend: {
           display: false,
@@ -162,12 +169,12 @@ export default {
                 display: false,
               },
               borderColor: this.grey,
-              type: 'time',
+              type: "time",
               time: {
-                unit: 'minutes',
-                tooltipFormat: 'HH:mm:ss'
+                unit: "minutes",
+                tooltipFormat: "HH:mm:ss",
               },
-            }
+            },
           ],
           yAxes: [
             {
@@ -177,21 +184,26 @@ export default {
                 color: this.grey,
               },
               ticks: {
-                min: this.unit === '%' ? 0 : 10 * Math.floor((Math.min(...this.dataset) - 10) / 10),
-                max: this.unit === '%' ? 100 : 10 * Math.ceil((Math.max(...this.dataset) + 10) / 10),
+                min:
+                  this.unit === "%"
+                    ? 0
+                    : 10 * Math.floor((Math.min(...this.dataset) - 10) / 10),
+                max:
+                  this.unit === "%"
+                    ? 100
+                    : 10 * Math.ceil((Math.max(...this.dataset) + 10) / 10),
                 stepSize: 10,
                 callback: function(value) {
-                  return value + this.unit + ' ';
-                }.bind(this)
-              }
-            }
-          ]
-        }
-      }
+                  return value + this.unit + " ";
+                }.bind(this),
+              },
+            },
+          ],
+        },
+      },
     });
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
