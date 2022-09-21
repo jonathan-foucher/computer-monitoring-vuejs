@@ -14,7 +14,7 @@
     "lodash": "^4.17.21",
     "vue": "^2.6.14",
     "vue-socket.io": "^3.0.9",
-    "vuetify": "^2.5.3",
+    "vuetify": "^2.6.10",
     "vuex": "^3.6.2",
     "websocket-extensions": "^0.1.4"
   },
